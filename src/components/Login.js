@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState, useEffect } from 'react';
 import * as yup from 'yup';
@@ -35,6 +36,10 @@ const initialFormErrors = {
 }
 
 const intialButtonDisabled = true;
+  import React, { useState, useEffect } from "react";
+  import * as yup from "yup";
+  import axios from "axios";
+
 
 export default function Login() {
   // Slices of state
@@ -89,7 +94,6 @@ export default function Login() {
     postUser();
   }
   
-
   // SIDE EFFECTS //
   useEffect(() => {
     // Runs each time there is a change in state on formValues
@@ -119,4 +123,9 @@ export default function Login() {
       </Paper>
     </Container>
   );
+}
+=======
+  return (
+    <p>login</p>
+  )
 }
