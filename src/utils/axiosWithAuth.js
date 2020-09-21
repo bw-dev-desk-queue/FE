@@ -10,6 +10,8 @@ export function axiosWithAuth() {
   });
 }
 
+// do something like axiosWithSecret('/endpoint', 
+// grant_type=password&username=admin&password=admin )
 export function axiosWithSecret() {
   const clientID = "devdeskqueue";
   const clientSecret = "dudewheresmycarwheresyourcardude";
@@ -17,7 +19,8 @@ export function axiosWithSecret() {
   return axios.create({
     headers: {
       Authorization: 'Basic ' + auth,
+      "Content-Type": 'application/x-www-form-urlencoded',
     },
-    baseURL: 'https://dbidwell-dev-desek-queue.herokuapp.com',
+    baseURL: 'https://dbidwell-dev-desk-queue.herokuapp.com',
   });
 }
