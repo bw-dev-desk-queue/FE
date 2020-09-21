@@ -10,7 +10,7 @@ export function axiosWithAuth() {
   });
 }
 
-export function axiosLogin() {
+export function axiosWithSecret() {
   const clientID = "devdeskqueue";
   const clientSecret = "dudewheresmycarwheresyourcardude";
   const auth = window.btoa(clientID + ':' + clientSecret)
