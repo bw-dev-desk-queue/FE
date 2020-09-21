@@ -1,4 +1,4 @@
-import axiosWithAuth from '../utils/axiosWithAuth.js'
+import { axiosWithAuth } from '../utils/axiosWithAuth.js'
 
 export const LOGGING_IN = 'LOGGING_IN';
 export const LOGGED_IN = 'LOGGED_IN';
