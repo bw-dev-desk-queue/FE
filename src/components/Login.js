@@ -101,8 +101,8 @@ export default function Login() {
   return (
     <Container>
       <div style={styles.root}>
-        <h2>We're here to help.</h2>
-        <p>Create a help ticket and we'll connect you with a Lambda School Helper.</p>
+        <h2>DevDeskQueue</h2>
+        <p>We're here to help.</p>
       </div>
       <Paper style={styles.root} elevation={3}>
         <h2 style={styles.h2}>Login</h2>
