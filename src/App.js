@@ -1,14 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+
+import Login from './components/Login';
+import Signup from './components/Signup';
+import Student from './components/Student';
+import CreateTicket from './components/CreateTicket';
+import Helper from './components/Helper';
+import Tickets from './components/Tickets';
+
+
+// I'm thinking '/' for login page
+// '/signup' for Signup
+// '/student' show all the student's open tickets and allow deleting them
+// '/create-ticket'  allow students to create a new ticket
+
+// '/helper' show a list of tickets that person is 'helping' with
+// allow to mark as resolved, and to re-assign back to the general queue
+// '/tickets' then, can show all tickets that no helper has claimed
+// allow helper to click 'help student' button on ticket assigning the ticket to themselves
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>App Component</p>
-      </header>
-    </div>
+    <Router>
+      <div className='App'>
+        <Route exact path='/' component={Login} />
+        <Route path='/signup' component={Signup} />
+
+        <Route path='/student' component={Student} />
+        <Route path='/create-ticket' component={CreateTicket} />
+    
+        <Route path='/helper' component={Helper} />
+        <Route path='/tickets' component={Tickets} />
+      </div>
+    </Router>
   );
 }
 
