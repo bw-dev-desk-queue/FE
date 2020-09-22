@@ -23,18 +23,19 @@ export const login = (credentials) => (dispatch) => {
     })
 }
 
-export const getId = () => (dispatch) => {
-  dispatch({type: WHOAMI_START})
-  axiosWithAuth().get('/whoami')
-    .then(res => {
-      console.log(res);
-      dispatch({type: WHOAMI_SUCCESS, payload: res.data});
-    })
-    .catch(error => {
-      console.log(error);
-      dispatch({type: WHOAMI_FAIL});
-    })
-}
+export const getWhoIAm = () => (dispatch) => {
+    console.log('running');
+    dispatch({ type: WHOAMI_START });
+    axiosWithAuth().get('/users/user/2')
+      .then(res => {
+        console.log("WHOAMI: ", res);
+        dispatch({ type: WHOAMI_SUCCESS, payload: res.data });
+      })
+      .catch(error => {
+        console.log(error);
+        dispatch({ type: WHOAMI_FAIL });
+      });
+  };
 
 export const getUserIssues = (id) => (dispatch) => {
   dispatch({type: FETCH_ISSUES_START})

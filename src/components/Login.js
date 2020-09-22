@@ -7,6 +7,9 @@ import schema from '../validation/login_spec';
 import { axiosWithSecret } from '../utils/axiosWithAuth';
 import { Container, Paper, TextField, Button } from '@material-ui/core';
 
+import { connect } from 'react-redux';
+import { getWhoIAm } from '../actions';
+
 // INLINE STYLES //
 const styles = {
   root: {
@@ -37,7 +40,7 @@ const intialButtonDisabled = true;
 
 const initialAccessToken = "";
 
-export default function Login() {
+function Login(props) {
   // Slices of state
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
@@ -50,7 +53,8 @@ export default function Login() {
     console.log(accessToken);
     if (accessToken.length) {
       localStorage.setItem('token', accessToken);
-      history.push('/student')
+      props.getWhoIAm(); 
+      history.push('/account')
     }
    } , [accessToken])
   
@@ -138,3 +142,9 @@ export default function Login() {
     </Container>
   );
 }
+
+function mapStateToProps() {
+  return {};
+};
+
+export default connect(mapStateToProps, { getWhoIAm })(Login);
