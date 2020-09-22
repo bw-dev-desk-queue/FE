@@ -4,6 +4,7 @@ import * as yup from 'yup';
 import schema from '../validation/login_spec';
 import { axiosWithSecret } from '../utils/axiosWithAuth';
 
+import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getWhoIAm } from '../actions';
 
@@ -50,11 +51,11 @@ function Login(props) {
     console.log(accessToken);
     if (accessToken.length) {
       localStorage.setItem('token', accessToken);
-      props.getWhoIAm(); 
+      props.getWhoIAm();
       history.push('/account')
     }
    } , [accessToken])
-  
+
   //////////////////////////////////
 
 
