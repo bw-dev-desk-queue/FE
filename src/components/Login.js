@@ -50,11 +50,11 @@ function Login(props) {
     console.log(accessToken);
     if (accessToken.length) {
       localStorage.setItem('token', accessToken);
-      props.getWhoIAm(); 
+      props.getWhoIAm();
       history.push('/account')
     }
    } , [accessToken])
-  
+
   //////////////////////////////////
 
 
