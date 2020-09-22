@@ -6,6 +6,9 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const FETCH_ISSUES_START = 'FETCH_ISSUES_START';
 export const FETCH_ISSUES_SUCCESS = 'FETCH_ISSUES_SUCCESS';
 export const FETCH_ISSUES_FAIL = 'FETCH_ISSUES_FAIL';
+export const WHOAMI_START = 'WHOAMI_START';
+export const WHOAMI_SUCCESS = 'WHOAMI_SUCCESS';
+export const WHOAMI_FAIL = 'WHOAMI_FAIL';
 
 export const login = (credentials) => (dispatch) => {
   dispatch({type: LOGGING_IN})
@@ -20,6 +23,19 @@ export const login = (credentials) => (dispatch) => {
     })
 }
 
+export const getId = () => (dispatch) => {
+  dispatch({type: WHOAMI_START})
+  axiosWithAuth().get('/whoami')
+    .then(res => {
+      console.log(res);
+      dispatch({type: WHOAMI_SUCCESS, payload: res.data});
+    })
+    .catch(error => {
+      console.log(error);
+      dispatch({type: WHOAMI_FAIL});
+    })
+}
+
 export const getUserIssues = (id) => (dispatch) => {
   dispatch({type: FETCH_ISSUES_START})
   axiosWithAuth().get(`/issues/userid/${id}`)
@@ -31,7 +47,6 @@ export const getUserIssues = (id) => (dispatch) => {
 
         })
     })
-
 }
 
 export const getAllIssues = () => (dispatch) => {
