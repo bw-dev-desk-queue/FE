@@ -3,11 +3,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import * as yup from 'yup';
 import schema from '../validation/login_spec';
-
+import { axiosWithSecret as axiosWithSecret } from '../utils/axiosWithAuth';
 import { Container, Paper, TextField, Button } from '@material-ui/core';
-
-// Using for mock posts requests
-import axios from 'axios';
 
 // INLINE STYLES //
 const styles = {
@@ -26,35 +23,37 @@ const styles = {
 
 // INITIAL VALUES //
 const initialFormValues = {
-  email: "",
+  username: "",
   password: ""
 }
 
 const initialFormErrors = {
-  email: "",
+  username: "",
   password: ""
 }
 
 const intialButtonDisabled = true;
+
+const initialAccessToken = "";
 
 export default function Login() {
   // Slices of state
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [buttonDisabled, setButtonDisabled] = useState(intialButtonDisabled);
+  const [accessToken, setAccessToken] = useState(initialAccessToken);
 
   // HELPERS //
   const postUser = () => {
     const user = {
-      email: formValues.email,
+      username: formValues.username,
       password: formValues.password
     }
 
     // Mock post until endpoint is set up
-    axios.post('https://reqres.in/api/login', user)
+    axiosWithSecret().post('/login', `grant_type=password&username=${user.username}&password=${user.password}`)
       .then(res => {
-        console.log(res);
-
+        setAccessToken(res.data["access_token"]);
       })
       .catch(err => {
         console.log(err);
@@ -99,6 +98,10 @@ export default function Login() {
       })
   }, [ formValues ]);
 
+  useEffect(() => {
+    // Listens for a change of state for the access token
+  }, [ accessToken ]);
+
   return (
     <Container>
       <div style={styles.root}>
@@ -109,7 +112,7 @@ export default function Login() {
         <h2 style={styles.h2}>Login</h2>
         <form onSubmit={onSubmit}>
           <div style={styles.inputContainer}>
-            <TextField onChange={onChange} value={formValues.email} name="email" label="Email" type="email" autoComplete="current-email" variant="outlined" required error={formErrors.email === "" ? false : true} helperText={formErrors.email} />
+            <TextField onChange={onChange} value={formValues.username} name="username" label="username" type="username" autoComplete="current-username" variant="outlined" required error={formErrors.username === "" ? false : true} helperText={formErrors.username} />
           </div>
           <div style={styles.inputContainer}>
             <TextField onChange={onChange} value={formValues.password} name="password" label="Password" type="password" autoComplete="current-password" variant="outlined" required error={formErrors.password === "" ? false : true} helperText={formErrors.password} />
