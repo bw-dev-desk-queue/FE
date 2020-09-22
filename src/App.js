@@ -4,9 +4,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import Login from './components/Login';
 import Signup from './components/Signup';
-import Student from './components/Student';
+import Account from './components/Account';
 import CreateTicket from './components/CreateTicket';
-import Helper from './components/Helper';
 import Tickets from './components/Tickets';
 
 
@@ -26,11 +25,8 @@ function App() {
       <div className='App'>
         <Route exact path='/' component={Login} />
         <Route path='/signup' component={Signup} />
-
-        <Route path='/student' component={Student} />
+        <Route path='/account' component={Account} />
         <Route path='/create-ticket' component={CreateTicket} />
-    
-        <Route path='/helper' component={Helper} />
         <Route path='/tickets' component={Tickets} />
       </div>
     </Router>
