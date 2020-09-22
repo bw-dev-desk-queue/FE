@@ -14,6 +14,7 @@ import {
 const initialState = {
   issues: [],
   userIssues: [],
+  userAnswers: [],
   accountInfo: {roles: [], id: null, username: ''},
   fetching: 'false',
   error: '',
