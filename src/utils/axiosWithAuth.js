@@ -4,7 +4,7 @@ export function axiosWithAuth() {
   const token = localStorage.getItem('token');
   return axios.create({
     headers: {
-//      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     baseURL: 'https://dbidwell-dev-desk-queue.herokuapp.com',
   });

@@ -1,9 +1,10 @@
 
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import * as yup from 'yup';
 import schema from '../validation/login_spec';
-import { axiosWithSecret as axiosWithSecret } from '../utils/axiosWithAuth';
+import { axiosWithSecret } from '../utils/axiosWithAuth';
 import { Container, Paper, TextField, Button } from '@material-ui/core';
 
 // INLINE STYLES //
@@ -42,6 +43,20 @@ export default function Login() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [buttonDisabled, setButtonDisabled] = useState(intialButtonDisabled);
   const [accessToken, setAccessToken] = useState(initialAccessToken);
+
+  /// TAKING TOKEN AND MOVING ON ///
+  const history = useHistory();
+  useEffect(() => {
+    console.log(accessToken);
+    if (accessToken.length) {
+      localStorage.setItem('token', accessToken);
+      history.push('/student')
+    }
+   } , [accessToken])
+  
+  //////////////////////////////////
+
+
 
   // HELPERS //
   const postUser = () => {
