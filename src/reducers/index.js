@@ -19,7 +19,6 @@ const initialState = {
   fetching: 'false',
   error: '',
 }
-
 export default function reducer( state = initialState, action ) {
   switch( action.type )
   {

@@ -1,5 +1,4 @@
 import { axiosWithAuth } from '../utils/axiosWithAuth.js'
-
 export const LOGGING_IN = 'LOGGING_IN';
 export const LOGGED_IN = 'LOGGED_IN';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
@@ -9,6 +8,10 @@ export const FETCH_ISSUES_FAIL = 'FETCH_ISSUES_FAIL';
 export const WHOAMI_START = 'WHOAMI_START';
 export const WHOAMI_SUCCESS = 'WHOAMI_SUCCESS';
 export const WHOAMI_FAIL = 'WHOAMI_FAIL';
+export const POST_ISSUE_START = 'POST_ISSUE_START';
+export const POST_ISSUE_SUCCESS = 'POST_ISSUE_SUCCESS';
+export const POST_ISSUE_FAIL = 'POST_ISSUE_FAIL';
+
 
 export const login = (credentials) => (dispatch) => {
   dispatch({type: LOGGING_IN})
@@ -17,22 +20,22 @@ export const login = (credentials) => (dispatch) => {
       console.log(res);
       dispatch({type: LOGGED_IN, payload: res.data});
     })
-    .catch(error => {
-      console.log(error);
-      dispatch({type: LOGIN_FAIL, payload: error.errors});
+    .catch(err => {
+      console.log(err);
+      dispatch({type: LOGIN_FAIL, payload: err.errors});
     })
 }
 
 export const getWhoIAm = () => (dispatch) => {
     console.log('running');
     dispatch({ type: WHOAMI_START });
-    axiosWithAuth().get('/users/user/2')
+    axiosWithAuth().get('/users/whoami')
       .then(res => {
         console.log("WHOAMI: ", res);
         dispatch({ type: WHOAMI_SUCCESS, payload: res.data });
       })
-      .catch(error => {
-        console.log(error);
+      .catch(err => {
+        console.log(err);
         dispatch({ type: WHOAMI_FAIL });
       });
   };
@@ -60,5 +63,17 @@ export const getAllIssues = () => (dispatch) => {
     .catch(err => {
       console.log('ERROR FETCHING');
       dispatch({type: FETCH_ISSUES_FAIL, payload: err})
+    })
+}
+
+export const postIssue = (issue) => (dispatch) => {
+  dispatch({type: POST_ISSUE_START});
+  axiosWithAuth().post(`/issues/issues`, issue)
+    .then(res => {
+      console.log('post', res);
+      dispatch({type: POST_ISSUE_SUCCESS});
+    })
+    .catch(err => {
+      console.log('POST ERROR:', err);
     })
 }

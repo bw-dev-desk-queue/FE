@@ -7,7 +7,7 @@ import Signup from './components/Signup';
 import Account from './components/Account';
 import CreateTicket from './components/CreateTicket';
 import Tickets from './components/Tickets';
-
+import NavBar from './components/NavBar';
 
 // I'm thinking '/' for login page
 // '/signup' for Signup
@@ -23,6 +23,7 @@ function App() {
   return (
     <Router>
       <div className='App'>
+        <Route path ='/' component={NavBar} />
         <Route exact path='/' component={Login} />
         <Route path='/signup' component={Signup} />
         <Route path='/account' component={Account} />
