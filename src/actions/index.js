@@ -1,5 +1,4 @@
 import { axiosWithAuth } from '../utils/axiosWithAuth.js'
-
 export const LOGGING_IN = 'LOGGING_IN';
 export const LOGGED_IN = 'LOGGED_IN';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
@@ -13,6 +12,7 @@ export const POST_ISSUE_START = 'POST_ISSUE_START';
 export const POST_ISSUE_SUCCESS = 'POST_ISSUE_SUCCESS';
 export const POST_ISSUE_FAIL = 'POST_ISSUE_FAIL';
 
+
 export const login = (credentials) => (dispatch) => {
   dispatch({type: LOGGING_IN})
   axiosWithAuth().get('/login', credentials)
@@ -21,7 +21,7 @@ export const login = (credentials) => (dispatch) => {
       dispatch({type: LOGGED_IN, payload: res.data});
     })
     .catch(err => {
-      console.log(error);
+      console.log(err);
       dispatch({type: LOGIN_FAIL, payload: err.errors});
     })
 }
@@ -29,7 +29,7 @@ export const login = (credentials) => (dispatch) => {
 export const getWhoIAm = () => (dispatch) => {
     console.log('running');
     dispatch({ type: WHOAMI_START });
-    axiosWithAuth().get('/users/user/2')
+    axiosWithAuth().get('/users/whoami')
       .then(res => {
         console.log("WHOAMI: ", res);
         dispatch({ type: WHOAMI_SUCCESS, payload: res.data });
@@ -68,12 +68,12 @@ export const getAllIssues = () => (dispatch) => {
 
 export const postIssue = (issue) => (dispatch) => {
   dispatch({type: POST_ISSUE_START});
-  axiosWithAUth().post(`/issues/issues`, issue)
+  axiosWithAuth().post(`/issues/issues`, issue)
     .then(res => {
       console.log('post', res);
       dispatch({type: POST_ISSUE_SUCCESS});
     })
     .catch(err => {
-      console.log('POST ERROR:' err);
+      console.log('POST ERROR:', err);
     })
 }

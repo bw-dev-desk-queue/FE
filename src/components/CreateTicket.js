@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import * as yup from "yup";
 import axios from "axios";
-
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { postIssue } from '../actions';
 const formSchema = yup.object().shape({
   name: yup.string().required("Title is a required field"),
   description: yup
@@ -11,7 +13,7 @@ const formSchema = yup.object().shape({
   category: yup.string()
 });
 
-export default function CreateTicket() {
+function CreateTicket(props) {
   // managing state for our form inputs
   const [formState, setFormState] = useState({
     name: "",
@@ -61,25 +63,36 @@ export default function CreateTicket() {
         });
       });
   };
-  const formSubmit = e => {
+  /// lets use redux to push to the backend ///
+  /// then go back to the account page on success ///
+   const history = useHistory();
+   const formSubmit = e => {
     e.preventDefault();
-    axios
-      .post("https://reqres.in/api/users", formState)
-      .then(res => {
-        setPost(res.data);
-        console.log("success", post);
+    props.postIssue({
+      title: formState.name,
+      description: formState.description,
+      whatitried: formState.wit,
+      category: formState.category
+    })
+    setTimeout(history.push('/account', 500));
+  } 
+    // axios
+    //   .post("https://reqres.in/api/users", formState)
+    //   .then(res => {
+    //     setPost(res.data);
+    //     console.log("success", post);
 
-        setFormState({
-          name: "",
-          description: "",
-          wit: "",
-          category: ""
-        });
-      })
-      .catch(err => {
-        console.log(err.res);
-      });
-  };
+    //     setFormState({
+    //       name: "",
+    //       description: "",
+    //       wit: "",
+    //       category: ""
+    //     });
+    //   })
+    //   .catch(err => {
+    //     console.log(err.res);
+    //   });
+    // };
 
   const inputChange = e => {
     e.persist();
@@ -155,3 +168,5 @@ export default function CreateTicket() {
     </form>
   );
 }
+
+export default connect(() => {}, {postIssue})(CreateTicket);
