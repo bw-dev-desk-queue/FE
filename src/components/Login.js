@@ -36,10 +36,6 @@ const initialFormErrors = {
 }
 
 const intialButtonDisabled = true;
-  import React, { useState, useEffect } from "react";
-  import * as yup from "yup";
-  import axios from "axios";
-
 
 export default function Login() {
   // Slices of state
@@ -123,9 +119,4 @@ export default function Login() {
       </Paper>
     </Container>
   );
-}
-=======
-  return (
-    <p>login</p>
-  )
 }
