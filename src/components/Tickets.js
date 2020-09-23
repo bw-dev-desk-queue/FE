@@ -1,40 +1,41 @@
-import React, { useEffect} from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAllIssues } from '../actions';
 import { connect } from 'react-redux';
-
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 function Tickets(props) {
-  // this will load all issues into 'props.issues'
-  useEffect(() => props.getAllIssues(), [])
-  // there is also a boolean 'props.fetching'
-  // that is true if currently requesting issues
-  // and false if not.
-  
-  if (props.fetching === false && props.issues.length > 0) {
-    console.log("Tickets.js:" + props.issues)
-  }
-  
- 
-  return (
-    <div >
-      {props.tickets.map(ticket => (
-        <div key={ticket.id}>
-          <h2>{ticket.name}</h2>
-          <p>{ticket.description}</p>
-          <p>{ticket.wit}</p>
-          <p>{ticket.category}</p>
+    const [data, setData] = useState([])
+    useEffect(() => {
+        axiosWithAuth()
+            .get('https://dbidwell-dev-desk-queue.herokuapp.com/issues/issues')
+            .then(res => setData(res.data))
+            .catch(err => console.log(err))
+    }, [])
+    if (props.fetching === false && props.issues.length > 0) {
+        console.log("Tickets.js:" + props.issues)
+    }
+    return (
+        <div >
+            <p>Tickets</p>
+            {data.map(ticket => {
+                return (
+                    <div key={ticket.id}>
+                        <h2>Title: {ticket.title}</h2>
+                        <p>Username: {ticket.createduser.username}</p>
+                        <p>Description: {ticket.description}</p>
+                        <p>Category: {ticket.category}</p>
+                        <p>Ticket Status: {ticket.isresolved === true ? 'true' : 'false'}</p>
+                    </div>
+                )
+            })}
         </div>
-      ))}
-    </div>
-  );
+    );
 };
 
-
 const mapStateToProps = (state) => {
-  return {
-    issues: state.issues,
-    accountInfo: state.accountInfo,
-    fetching: state.fetching,
-  }
+    return {
+        issues: state.issues,
+        accountInfo: state.accountInfo,
+        fetching: state.fetching,
+    }
 }
-
-export default connect(mapStateToProps, { getAllIssues})(Tickets);
+export default connect(mapStateToProps, { getAllIssues })(Tickets);
