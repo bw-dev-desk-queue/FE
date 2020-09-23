@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
 import { TextField, Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-
 import { makeStyles } from '@material-ui/core/styles';
-
 import * as yup from 'yup';
 import schema from '../validation/response_spec';
+
+import { connect } from 'react-redux';
+import { postAnswer } from '../actions';
 
 const useStyles = makeStyles({
     ticketContainer: {
@@ -64,7 +65,7 @@ const initialFormErrors = {
 }
 
 // The responses prop should contain the answers that other users have posted to the ticket
-export default function Ticket({ id, title, description, category, wit, responses, canResolve }) {
+function Ticket({ id, title, description, category, wit, responses, canResolve, postAnswer }) {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
@@ -88,7 +89,7 @@ export default function Ticket({ id, title, description, category, wit, response
         const response = {
           message: formValues.message,
         }
-
+        
         // POST WITH AXIOS
         // IF SUCCESS, RESET FORM VALUES TO INITIAL VALUES
 
@@ -109,7 +110,7 @@ export default function Ticket({ id, title, description, category, wit, response
     const onSubmit = (evt) => {
         evt.preventDefault();
         // POST
-
+        postAnswer(id, formValues.message)
         // Clear
     }
 
@@ -222,3 +223,5 @@ export default function Ticket({ id, title, description, category, wit, response
         </div>
     );
 }
+
+export default connect(() => ({}), { postAnswer })(Ticket)

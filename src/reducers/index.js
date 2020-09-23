@@ -6,6 +6,12 @@ import {
   WHOAMI_START,
   WHOAMI_SUCCESS,
   WHOAMI_FAIL,
+  POST_ISSUE_START,
+  POST_ISSUE_SUCCESS,
+  POST_ISSUE_FAIL,
+  POST_ANSWER_START,
+  POST_ANSWER_SUCCESS,
+  POST_ANSWER_FAIL
 } from '../actions';
 
 
@@ -64,6 +70,12 @@ export default function reducer( state = initialState, action ) {
         fetching: false,
         error: action.payload
       }
+    case POST_ISSUE_START:
+    case POST_ISSUE_FAIL:
+    case POST_ISSUE_SUCCESS:
+    case POST_ANSWER_START:
+    case POST_ANSWER_FAIL:
+    case POST_ANSWER_SUCCESS:
     default:
       return state;
   }
