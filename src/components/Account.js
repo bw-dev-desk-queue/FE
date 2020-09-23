@@ -22,9 +22,6 @@ const styles = {
   },
 }
 
-// MOCK DATA
-// const respones = [{id: 1, username: 'Bob', message: 'Have you tried turning it off & on again?'}, {id: 2, username: 'Jace', message: 'I experienced something similar. Try doing this and then that.'}, {id: 3, username: 'Ryan', message: 'Did you get it fixed? I am having the same issue. I tried this and that, but it still is not working. Maybe it is because of this?'}];
-
 function Account(props) {
   // props has username, fetching, error,
   // and the big two are userIssues, and userAnswers
@@ -44,7 +41,7 @@ function Account(props) {
           <h3 style={styles.h3} >Issues</h3>
           {
             props.userIssues.map(issue => {
-              return (<Ticket key={issue.id} id={issue.id} title={issue.title} category={issue.category} description={issue.description} wit={issue.whatitried}  />);
+              return (<Ticket key={issue.id} id={issue.id} title={issue.title} category={issue.category} description={issue.description} wit={issue.whatitried} canResolve={true} responses={[]}  />);
             })
           }
         </Paper>
@@ -52,7 +49,7 @@ function Account(props) {
           <h3 style={styles.h3} >Answers</h3>
           {
             props.userAnswers.map(ticket => {
-              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.title} category={ticket.category} description={ticket.description} wit={ticket.whatitried}  />);
+              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.title} category={ticket.category} description={ticket.description} wit={ticket.whatitried} canResolve={false} />);
             })
           }
         </Paper>
