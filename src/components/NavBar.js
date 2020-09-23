@@ -1,9 +1,12 @@
 import React from 'react';
+import { AppBar } from '@material-ui/core';
 
 function NavBar(props) {
 
   return (
-    <p>NavBar</p>
+    <AppBar>
+    <h1>DevDeskQueue</h1>
+    </AppBar>
   );
 
 }

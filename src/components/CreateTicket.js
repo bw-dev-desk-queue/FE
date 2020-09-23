@@ -65,6 +65,9 @@ function CreateTicket(props) {
   };
   /// lets use redux to push to the backend ///
   /// then go back to the account page on success ///
+  /// I do this by passing the historyObj to the
+  /// action creator. never seen that done before
+  /// but it works like a charm!
    const history = useHistory();
    const formSubmit = e => {
     e.preventDefault();
@@ -73,8 +76,7 @@ function CreateTicket(props) {
       description: formState.description,
       whatitried: formState.wit,
       category: formState.category
-    })
-    setTimeout(history.push('/account', 500));
+    }, history)
   } 
     // axios
     //   .post("https://reqres.in/api/users", formState)

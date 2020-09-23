@@ -66,12 +66,14 @@ export const getAllIssues = () => (dispatch) => {
     })
 }
 
-export const postIssue = (issue) => (dispatch) => {
+export const postIssue = (issue, historyObj) => (dispatch) => {
   dispatch({type: POST_ISSUE_START});
   axiosWithAuth().post(`/issues/issues`, issue)
     .then(res => {
       console.log('post', res);
       dispatch({type: POST_ISSUE_SUCCESS});
+      historyObj.push('/account');
+        
     })
     .catch(err => {
       console.log('POST ERROR:', err);
