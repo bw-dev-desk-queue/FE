@@ -8,6 +8,7 @@ import Account from './components/Account';
 import CreateTicket from './components/CreateTicket';
 import Tickets from './components/Tickets';
 import NavBar from './components/NavBar';
+import Logout from './components/Logout';
 
 // I'm thinking '/' for login page
 // '/signup' for Signup
@@ -29,6 +30,7 @@ function App() {
         <Route path='/account' component={Account} />
         <Route path='/create-ticket' component={CreateTicket} />
         <Route path='/tickets' component={Tickets} />
+        <Route path='/logout' component={Logout} />
       </div>
     </Router>
   );

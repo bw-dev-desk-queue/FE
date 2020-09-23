@@ -30,6 +30,7 @@ function Tickets(props) {
         </div>
     );
 };
+
 const mapStateToProps = (state) => {
     return {
         issues: state.issues,
