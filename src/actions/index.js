@@ -9,6 +9,9 @@ export const WHOAMI_FAIL = 'WHOAMI_FAIL';
 export const POST_ISSUE_START = 'POST_ISSUE_START';
 export const POST_ISSUE_SUCCESS = 'POST_ISSUE_SUCCESS';
 export const POST_ISSUE_FAIL = 'POST_ISSUE_FAIL';
+export const POST_ANSWER_START = 'POST_ANSWER_START';
+export const POST_ANSWER_SUCCESS = 'POST_ANSWER_SUCCESS';
+export const POST_ANSWER_FAIL = 'POST_ANSWER_FAIL';
 
 
 export const logout = () => (dispatch) => {
@@ -66,5 +69,22 @@ export const postIssue = (issue, historyObj) => (dispatch) => {
     })
     .catch(err => {
       console.log('POST ERROR:', err);
+    })
+}
+
+export const postAnswer = (issueId, message) => (dispatch) => {
+  dispatch({type: POST_ANSWER_START});
+  axiosWithAuth()
+    .post(`/answers/issueid/${issueId}`, 
+      {answer: message}
+    )
+    .then(res => {
+      console.log(res);
+      dispatch({type: POST_ANSWER_SUCCESS})
+      dispatch(getWhoIAm());
+    })
+    .catch(err => {
+      console.log(err)
+      dispatch({type: POST_ANSWER_FAIL})
     })
 }
