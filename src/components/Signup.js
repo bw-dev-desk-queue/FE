@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Paper, TextField, MenuItem, Button, Select, InputLabel } from '@material-ui/core';
-import { axiosWithSecret } from '../utils/axiosWithAuth';
+import { axiosSignup } from '../utils/axiosWithAuth';
 import * as yup from 'yup';
 import schema from '../validation/signup_spec';
 
@@ -49,9 +49,13 @@ export default function Signup() {
     const newUser = {
       username: formValues.username,
       password: formValues.password,
-      roleArr: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
+      roles: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
     }
-
+      axiosSignup().post(
+        '/createnewuser', newUser
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
   }
 
   const validate = (name, value) => {
