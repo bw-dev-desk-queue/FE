@@ -6,8 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
 import schema from '../validation/response_spec';
 
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 import { connect } from 'react-redux';
-import { postAnswer } from '../actions';
+import { postAnswer, getWhoIAm } from '../actions';
 
 const useStyles = makeStyles({
     ticketContainer: {
@@ -65,7 +66,7 @@ const initialFormErrors = {
 }
 
 // The responses prop should contain the answers that other users have posted to the ticket
-function Ticket({ id, title, description, category, wit, responses, canResolve, postAnswer }) {
+function Ticket({ id, title, description, category, wit, responses, canResolve, postAnswer, getWhoIAm }) {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
@@ -85,16 +86,6 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
               })
     }
 
-    const postResponse = () => {
-        const response = {
-          message: formValues.message,
-        }
-        
-        // POST WITH AXIOS
-        // IF SUCCESS, RESET FORM VALUES TO INITIAL VALUES
-
-    }
-
     // EVENT HANDLERS //
     const onChange = (evt) => {
         const name = evt.target.name;
@@ -108,13 +99,25 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
     }
 
     const onSubmit = (evt) => {
-        evt.preventDefault();
-        // POST
-        postAnswer(id, formValues.message)
-        // Clear
+      evt.preventDefault();
+      // POST
+      // I created another redux action for this
+      // but did I need to?
+      postAnswer(id, formValues.message)
+      // Clear
+      setFormValues(initialFormValues);
     }
 
     const onResolveClick = () => {
+      // lets try not using a new redux action
+      axiosWithAuth().get(`/issues/resolve/${id}?resolved=true`)
+        .then(res => {
+          console.log(res);
+          getWhoIAm();
+        })
+        .catch(err => {
+          console.log(err);
+        })
         // POST RESOLVE FOR TICKET
     }
 
@@ -224,4 +227,4 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
     );
 }
 
-export default connect(() => ({}), { postAnswer })(Ticket)
+export default connect(() => ({}), { postAnswer, getWhoIAm })(Ticket)
