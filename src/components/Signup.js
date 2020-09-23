@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container, Paper, TextField, MenuItem, Button, Select, InputLabel } from '@material-ui/core';
 import { axiosSignup } from '../utils/axiosWithAuth';
 import * as yup from 'yup';
@@ -38,6 +39,7 @@ const initialAccessToken = "";
 
 
 export default function Signup() {
+  const history = useHistory();
   // SLICES OF STATE //
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
@@ -54,7 +56,11 @@ export default function Signup() {
       axiosSignup().post(
         '/createnewuser', newUser
       )
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res)
+        localStorage.setItem('token', res.data["access_token"]);
+        history.push('/account');
+      })
       .catch((err) => console.log(err))
   }
 
