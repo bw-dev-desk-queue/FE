@@ -3,10 +3,12 @@ import { Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core
 import { TextField, Button, InputLabel } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import * as yup from 'yup';
 import schema from '../validation/response_spec';
 
-const styles = {
+const useStyles = makeStyles({
     ticketContainer: {
       width: '95%',
       margin: '0 auto',
@@ -18,6 +20,9 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         paddingBottom: '1%',
+    },
+    ticketContent : {
+        borderBottom: '1px solid gainsboro',
     },
     response: {
         display: 'block',
@@ -32,6 +37,7 @@ const styles = {
         maxWidth: 'none',
         flexDirection: 'row',
         borderTop: '1px solid gainsboro',
+        borderRadius: '10px',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -42,7 +48,7 @@ const styles = {
     button: {
         width: '10%',
     },
-}
+})
 
 const initialFormValues = {
     message: "",
@@ -59,6 +65,8 @@ export default function Ticket({ id, title, description, category, wit, response
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
+
+    const classes = useStyles();
 
     // HELPERS //
     const validate = (name, value) => {
@@ -114,13 +122,13 @@ export default function Ticket({ id, title, description, category, wit, response
     // Check if there are responses to the ticket
     if (!responses || responses.length() <= 0) {
         return (
-            <div style={styles.ticketContainer} >
+            <div className={classes.ticketContainer} >
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <h3>{id}: {title}</h3>
                 </AccordionSummary>
-                <AccordionDetails style={styles.accordionDetails} >
-                    <div>
+                <AccordionDetails className={classes.accordionDetails} >
+                    <div className={classes.ticketContent} >
                         <p>
                             {description}{wit}
                         </p>
@@ -130,15 +138,17 @@ export default function Ticket({ id, title, description, category, wit, response
                             </p>
                         </div>
                         <div>
-                            <p><em>{category}</em></p>
+                            <p>
+                                <b>Category:</b> <em>{category}</em>
+                            </p>
                         </div>
                     </div>
                     <div>
                         <h4 style={{textAlign: 'left'}}>Responses:</h4>
                         <h5>There are no responses</h5>
-                        <form onSubmit={onSubmit} style={styles.form}>
-                            <TextField onChange={onChange} value={formValues.message} name="message" label="Respond:" type="text" style={styles.textField} />
-                            <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" style={styles.button}>Reply</Button>
+                        <form onSubmit={onSubmit} className={classes.form}>
+                            <TextField onChange={onChange} value={formValues.message} name="message" label="Respond:" type="text" className={classes.textField} />
+                            <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
                         </form>
                     </div>
                 </AccordionDetails>
@@ -148,13 +158,13 @@ export default function Ticket({ id, title, description, category, wit, response
     }
 
     return (
-        <div style={styles.ticketContainer} >
+        <div className={classes.ticketContainer} >
             <Accordion>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                     <h3>{id}: {title}</h3>
                 </AccordionSummary>
-                <AccordionDetails style={styles.accordionDetails} >
-                    <div>
+                <AccordionDetails className={classes.accordionDetails} >
+                    <div className={classes.ticketContent} >
                         <p>
                             {description}{wit}
                         </p>
@@ -164,7 +174,9 @@ export default function Ticket({ id, title, description, category, wit, response
                             </p>
                         </div>
                         <div>
-                            <p><em>{category}</em></p>
+                            <p>
+                                <b>Category:</b> <em>{category}</em>
+                            </p>
                         </div>
                     </div>
                     <div>
@@ -172,7 +184,7 @@ export default function Ticket({ id, title, description, category, wit, response
                         {
                             responses.map(resp => {
                                 return (
-                                    <div key={resp.id} style={styles.response} >
+                                    <div key={resp.id} className={classes.response} >
                                         <div>
                                             <span>{resp.username}</span>
                                         </div>
@@ -183,9 +195,9 @@ export default function Ticket({ id, title, description, category, wit, response
                                 );
                             })
                         }
-                        <form onSubmit={onSubmit} style={styles.form}>
-                            <TextField onChange={onChange} value={formValues.message} name="message" label="Respond:" type="text" style={styles.textField} />
-                            <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" style={styles.button}>Reply</Button>
+                        <form onSubmit={onSubmit} className={classes.form}>
+                            <TextField onChange={onChange} value={formValues.message} name="message" label="Respond:" type="text" className={classes.textField} />
+                            <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
                         </form>
                     </div>
                 </AccordionDetails>

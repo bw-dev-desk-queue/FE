@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Paper, TextField, MenuItem, Button, Select, InputLabel } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import { axiosWithSecret } from '../utils/axiosWithAuth';
 import * as yup from 'yup';
 import schema from '../validation/signup_spec';
 
 // INLINE STYLES //
-const styles = {
+const useStyles = makeStyles({
   root: {
     width: '50%',
     margin: '0 auto',
     padding: '2% 0',
   },
-  inputContainer: {
-    margin: '4% 0',
+  inputsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'space-around',
   },
   h2: {
     margin: '0',
   },
-}
+  input: {
+    margin: '4% 0',
+  },
+  button: {
+    width: '17%',
+    marginTop: '2%',
+  }
+})
 
 // INITIAL VALUES //
 const initialFormValues = {
@@ -43,6 +53,8 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [buttonDisabled, setButtonDisabled] = useState(intialButtonDisabled);
   const [accessToken, setAccessToken] = useState(initialAccessToken);
+
+  const classes = useStyles();
 
   // HELPERS //
   const postNewUser = () => {
@@ -99,28 +111,22 @@ export default function Signup() {
 
   return (
     <Container>
-      <div style={styles.root}>
-        <h2>DevDeskQueue</h2>
-        <p>We're here to help.</p>
-      </div>
-      <Paper style={styles.root} elevation={3}>
-        <h2 style={styles.h2}>Sign Up</h2>
+      <Paper className={classes.root} elevation={3}>
+        <h2 className={classes.h2}>Sign Up</h2>
         <form onSubmit={onSubmit}>
-          <div style={styles.inputContainer}>
-            <TextField onChange={onChange} value={formValues.username} name="username" label="username" type="username" autoComplete="current-username" variant="outlined" required error={formErrors.username === "" ? false : true} helperText={formErrors.username} />
+          <div className={classes.inputsContainer}>
+            <TextField className={classes.input} onChange={onChange} value={formValues.username} name="username" label="username" type="username" autoComplete="current-username" variant="outlined" required error={formErrors.username === "" ? false : true} helperText={formErrors.username} />
+            <TextField className={classes.input} onChange={onChange} value={formValues.password} name="password" label="Password" type="password" autoComplete="current-password" variant="outlined" required error={formErrors.password === "" ? false : true} helperText={formErrors.password} />
           </div>
-          <div style={styles.inputContainer}>
-            <TextField onChange={onChange} value={formValues.password} name="password" label="Password" type="password" autoComplete="current-password" variant="outlined" required error={formErrors.password === "" ? false : true} helperText={formErrors.password} />
-          </div>
-          <div style={styles.inputContainer}>
+          <div className={classes.inputsContainer}>
             <InputLabel>Role:</InputLabel>
-            <Select onChange={onChange} name={'role'} value={formValues.role} label="Role" >
+            <Select className={classes.input} onChange={onChange} name={'role'} value={formValues.role} label="Role" >
               <MenuItem value={'student'}>Student</MenuItem>
               <MenuItem value={'helper'}>Helper</MenuItem>
               <MenuItem value={'student and helper'}>Student & Helper</MenuItem>
             </Select>
           </div>
-          <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary">Submit</Button>
+          <Button className={classes.button} disabled={buttonDisabled} type="submit" variant="contained" color="primary">Submit</Button>
         </form>
       </Paper>
     </Container>
