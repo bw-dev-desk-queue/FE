@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
-import { TextField, Button, InputLabel } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
@@ -27,9 +27,9 @@ const useStyles = makeStyles({
     },
     response: {
         display: 'block',
-        padding: '1% 0',
+        padding: '2% 0',
         margin: '3% 0',
-        borderRadius: '5px',
+        borderRadius: '3px',
         border: '1px solid gainsboro',
     },
     form: {
@@ -38,7 +38,7 @@ const useStyles = makeStyles({
         maxWidth: 'none',
         flexDirection: 'row',
         borderTop: '1px solid gainsboro',
-        borderRadius: '10px',
+        borderRadius: '2px',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
@@ -48,6 +48,9 @@ const useStyles = makeStyles({
     },
     button: {
         width: '10%',
+    },
+    resolveButton: {
+        marginBottom: '2%',
     },
 })
 
@@ -62,7 +65,7 @@ const initialFormErrors = {
 }
 
 // The responses prop should contain the answers that other users have posted to the ticket
-function Ticket({ id, title, description, category, wit, responses, postAnswer }) {
+function Ticket({ id, title, description, category, wit, responses, canResolve, postAnswer }) {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
@@ -111,6 +114,10 @@ function Ticket({ id, title, description, category, wit, responses, postAnswer }
         // Clear
     }
 
+    const onResolveClick = () => {
+        // POST RESOLVE FOR TICKET
+    }
+
     // SIDE EFFECTS //
     useEffect(() => {
         // Runs each time there is a change in state on formValues
@@ -121,7 +128,7 @@ function Ticket({ id, title, description, category, wit, responses, postAnswer }
     }, [ formValues ]);
 
     // Check if there are responses to the ticket
-    if (!responses || responses.length() <= 0) {
+    if (!responses || responses.length <= 0) {
         return (
             <div className={classes.ticketContainer} >
             <Accordion>
@@ -152,6 +159,11 @@ function Ticket({ id, title, description, category, wit, responses, postAnswer }
                             <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
                         </form>
                     </div>
+                    {canResolve &&
+                        <div>
+                            <Button onClick={onResolveClick} variant="contained" color="primary" className={classes.button, classes.resolveButton}>Resolve</Button>
+                        </div>
+                    }
                 </AccordionDetails>
             </Accordion>
         </div>
@@ -201,6 +213,11 @@ function Ticket({ id, title, description, category, wit, responses, postAnswer }
                             <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
                         </form>
                     </div>
+                    {canResolve &&
+                        <div>
+                            <Button onClick={onResolveClick} variant="contained" color="primary" className={classes.button, classes.resolveButton}>Resolve</Button>
+                        </div>
+                    }
                 </AccordionDetails>
             </Accordion>
         </div>
