@@ -1,7 +1,5 @@
 import {
-  LOGGING_IN,
-  LOGGED_IN,
-  LOGIN_FAIL,
+  LOGOUT,
   FETCH_ISSUES_START,
   FETCH_ISSUES_SUCCESS,
   FETCH_ISSUES_FAIL,
@@ -22,19 +20,10 @@ const initialState = {
 export default function reducer( state = initialState, action ) {
   switch( action.type )
   {
-    case LOGGING_IN:
-      return {...state, fetching: true}
-    case LOGGED_IN:
+    case LOGOUT:
       return {
-        ...state,
-        fetching: false,
-        accountInfo: action.payload
-      }
-    case LOGIN_FAIL:
-      return {
-        ...state,
-        fetching: false,
-        error: action.payload
+        ...initialState,
+
       }
     case WHOAMI_START:
       return {

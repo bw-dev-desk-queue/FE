@@ -24,3 +24,15 @@ export function axiosWithSecret() {
     baseURL: 'https://dbidwell-dev-desk-queue.herokuapp.com',
   });
 }
+
+export function axiosSignup() {
+  const clientID = "devdeskqueue";
+  const clientSecret = "dudewheresmycarwheresyourcardude";
+  const auth = window.btoa(clientID + ':' + clientSecret)
+  return axios.create({
+    headers: {
+      Authorization: 'Basic ' + auth,
+    },
+    baseURL: 'https://dbidwell-dev-desk-queue.herokuapp.com',
+  });
+}

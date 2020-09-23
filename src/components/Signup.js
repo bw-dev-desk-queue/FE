@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container, Paper, TextField, MenuItem, Button, Select, InputLabel } from '@material-ui/core';
+import { axiosSignup } from '../utils/axiosWithAuth';
 import { makeStyles } from '@material-ui/core/styles';
-import { axiosWithSecret } from '../utils/axiosWithAuth';
 import * as yup from 'yup';
 import schema from '../validation/signup_spec';
 
@@ -48,6 +49,7 @@ const initialAccessToken = "";
 
 
 export default function Signup() {
+  const history = useHistory();
   // SLICES OF STATE //
   const [formValues, setFormValues] = useState(initialFormValues);
   const [formErrors, setFormErrors] = useState(initialFormErrors);
@@ -61,9 +63,17 @@ export default function Signup() {
     const newUser = {
       username: formValues.username,
       password: formValues.password,
-      roleArr: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
+      roles: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
     }
-
+      axiosSignup().post(
+        '/createnewuser', newUser
+      )
+      .then((res) => {
+        console.log(res)
+        localStorage.setItem('token', res.data["access_token"]);
+        history.push('/account');
+      })
+      .catch((err) => console.log(err))
   }
 
   const validate = (name, value) => {

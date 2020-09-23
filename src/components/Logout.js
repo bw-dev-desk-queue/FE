@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { logout } from '../actions';
 
-export default function Logout() {
+function Logout(props) {
   const history = useHistory();
-  localStorage.setItem('token', '');
-  history.push('/');
+  useEffect(() => {
+    localStorage.setItem('token', '');
+    props.logout()
+    history.push('/');
+  }, [])
+
   return ( <p>Logging out...</p> );
 }
+
+
+export default connect(() => ({}), { logout } )(Logout)
