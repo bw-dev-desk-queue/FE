@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 function Tickets(props) {
   return (
     <div >
+       <p>Tickets</p>
       {props.tickets.map(ticket => {
         <div key={ticket.id}>
           <h2>{ticket.name}</h2>
