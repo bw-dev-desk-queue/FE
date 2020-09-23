@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 function Tickets(props) {
   return (
     <div >
-      {props.tickets.map(ticket => (
+      {props.tickets.map(ticket => {
         <div key={ticket.id}>
           <h2>{ticket.name}</h2>
           <p>{ticket.description}</p>
           <p>{ticket.wit}</p>
           <p>{ticket.category}</p>
         </div>
-      ))}
+      })}
     </div>
   );
 };
