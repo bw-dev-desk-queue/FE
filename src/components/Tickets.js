@@ -3,6 +3,17 @@ import { getAllIssues } from '../actions';
 import { connect } from 'react-redux';
 
 function Tickets(props) {
+  // this will load all issues into 'props.issues'
+  useEffect(() => props.getAllIssues(), [])
+  // there is also a boolean 'props.fetching'
+  // that is true if currently requesting issues
+  // and false if not.
+  
+  if (props.fetching === false && props.issues.length > 0) {
+    console.log("Tickets.js:" + props.issues)
+  }
+  
+ 
   return (
     <div >
       {props.tickets.map(ticket => (
@@ -16,17 +27,6 @@ function Tickets(props) {
     </div>
   );
 };
-  // this will load all issues into 'props.issues'
-  useEffect(() => props.getAllIssues(), [])
-  // there is also a boolean 'props.fetching'
-  // that is true if currently requesting issues
-  // and false if not.
-  
-  if (props.fetching === false && props.issues.length > 0) {
-    console.log("Tickets.js:" + props.issues)
-  }
-  
- 
 
 
 const mapStateToProps = (state) => {
