@@ -52,6 +52,12 @@ const useStyles = makeStyles({
     resolveButton: {
         marginBottom: '2%',
     },
+    resolvedText: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: '5%',
+    }
 })
 
 const initialFormValues = {
@@ -64,11 +70,11 @@ const initialFormErrors = {
     message: "",
 }
 
-// The responses prop should contain the answers that other users have posted to the ticket
-function Ticket({ id, title, description, category, wit, responses, canResolve, postAnswer }) {
+function Ticket({ id, title, description, category, wit, answers, isResolved, postAnswer }) {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
+    const [issueAnswers, setIssueAnswers] = useState(answers);
 
     const classes = useStyles();
 
@@ -83,16 +89,6 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
               .catch(err => {
                 setFormErrors({ ...formErrors, [name]: err.errors[0] });
               })
-    }
-
-    const postResponse = () => {
-        const response = {
-          message: formValues.message,
-        }
-        
-        // POST WITH AXIOS
-        // IF SUCCESS, RESET FORM VALUES TO INITIAL VALUES
-
     }
 
     // EVENT HANDLERS //
@@ -110,8 +106,19 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
     const onSubmit = (evt) => {
         evt.preventDefault();
         // POST
-        postAnswer(id, formValues.message)
-        // Clear
+        const answer = {
+            id: id,
+            answer: formValues.message
+        }
+        postAnswer(answer.id, answer.answer);
+        // ADD TO STATE
+        if (!issueAnswers) {
+            setIssueAnswers( [answer] );
+        } else {
+            setIssueAnswers(...issueAnswers, [answer]);
+        }
+        // CLEAR FORM
+        setFormValues(initialFormValues);
     }
 
     const onResolveClick = () => {
@@ -127,54 +134,20 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
             })
     }, [ formValues ]);
 
-    // Check if there are responses to the ticket
-    if (!responses || responses.length <= 0) {
-        return (
-            <div className={classes.ticketContainer} >
-            <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <h3>{id}: {title}</h3>
-                </AccordionSummary>
-                <AccordionDetails className={classes.accordionDetails} >
-                    <div className={classes.ticketContent} >
-                        <p>
-                            {description}{wit}
-                        </p>
-                        <div>
-                            <p>
-                                <b>WIT:</b> {wit}
-                            </p>
-                        </div>
-                        <div>
-                            <p>
-                                <b>Category:</b> <em>{category}</em>
-                            </p>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 style={{textAlign: 'left'}}>Responses:</h4>
-                        <h5>There are no responses</h5>
-                        <form onSubmit={onSubmit} className={classes.form}>
-                            <TextField onChange={onChange} value={formValues.message} name="message" label="Respond:" type="text" className={classes.textField} />
-                            <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
-                        </form>
-                    </div>
-                    {canResolve &&
-                        <div>
-                            <Button onClick={onResolveClick} variant="contained" color="primary" className={classes.button, classes.resolveButton}>Resolve</Button>
-                        </div>
-                    }
-                </AccordionDetails>
-            </Accordion>
-        </div>
-        );
-    }
+    useEffect(() => {
+        console.log("Here are the responses: ", issueAnswers);
+    }, [issueAnswers])
 
     return (
         <div className={classes.ticketContainer} >
             <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <h3>{id}: {title}</h3>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} style={isResolved ? {backgroundColor: '#64f38c', color: 'white'} :  {backgroundColor: '#e73827', color: 'white'}} >
+                    <div>
+                        <h3>{title}</h3>
+                    </div>
+                    <div className={classes.resolvedText}>
+                        {isResolved ? <span>Resolved</span> : <span>Not Resolved</span>}
+                    </div>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails} >
                     <div className={classes.ticketContent} >
@@ -194,26 +167,26 @@ function Ticket({ id, title, description, category, wit, responses, canResolve, 
                     </div>
                     <div>
                         <h4 style={{textAlign: 'left'}}>Responses:</h4>
-                        {
-                            responses.map(resp => {
+                        {(issueAnswers.length > 0) &&
+                            issueAnswers.map(resp => {
                                 return (
                                     <div key={resp.id} className={classes.response} >
                                         <div>
-                                            <span>{resp.username}</span>
-                                        </div>
-                                        <div>
-                                            <p>{resp.message}</p>
+                                            <p>{resp.answer}</p>
                                         </div>
                                     </div>
                                 );
                             })
+                        }
+                        {(!issueAnswers) &&
+                            <h5>There are no responses</h5>
                         }
                         <form onSubmit={onSubmit} className={classes.form}>
                             <TextField onChange={onChange} value={formValues.message} name="message" label="Respond:" type="text" className={classes.textField} />
                             <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
                         </form>
                     </div>
-                    {canResolve &&
+                    {!isResolved &&
                         <div>
                             <Button onClick={onResolveClick} variant="contained" color="primary" className={classes.button, classes.resolveButton}>Resolve</Button>
                         </div>
