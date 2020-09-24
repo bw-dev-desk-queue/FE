@@ -31,8 +31,6 @@ function Account(props) {
     props.getWhoIAm();
   }, [])
 
-  console.log(props.userAnswers)
-
   return (
     <Container>
       <h2>Account</h2>
@@ -43,7 +41,7 @@ function Account(props) {
           <h3 style={styles.h3} >My Issues</h3>
           {
             props.userIssues.map(ticket => {
-              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.title} category={ticket.category} description={ticket.description} wit={ticket.whatitried} isResolved={ticket.isresolved} answers={ticket.answers} />);
+              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.title} category={ticket.category} description={ticket.description} wit={ticket.whatitried} isResolved={ticket.isresolved} canResolve={true} answers={ticket.answers} />);
             })
           }
         </Paper>
@@ -51,7 +49,7 @@ function Account(props) {
           <h3 style={styles.h3} >My Answers</h3>
           {
             props.userAnswers.map(ticket => {
-              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.issue.title} category={ticket.issue.category} description={ticket.issue.description} wit={ticket.issue.whatitried} isResolved={ticket.issue.isresolved} answers={[{id: ticket.id, answer: ticket.answer}]} />);
+              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.issue.title} category={ticket.issue.category} description={ticket.issue.description} wit={ticket.issue.whatitried} isResolved={ticket.issue.isresolved} canResolve={false} answers={[{id: ticket.id, answer: ticket.answer}]} />);
             })
           }
         </Paper>
