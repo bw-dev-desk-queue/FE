@@ -66,11 +66,11 @@ export default function Signup() {
       password: formValues.password,
       roles: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
     }
-      axiosSignup().post('/createnewuser', newUser)
-        .then((res) => {
-          localStorage.setItem('token', res.data["access_token"]);
-          history.push('/account');
-        })
+    axiosSignup().post('/createnewuser', newUser)
+      .then((res) => {
+        localStorage.setItem('token', res.data["access_token"]);
+        history.push('/account');
+      })
       .catch((err) => {
         setNetworkError(err.response.data.detail);
       })
