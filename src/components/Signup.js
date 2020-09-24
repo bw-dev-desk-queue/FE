@@ -65,9 +65,7 @@ export default function Signup() {
       password: formValues.password,
       roles: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
     }
-      axiosSignup().post(
-        '/createnewuser', newUser
-      )
+      axiosSignup().post('/createnewuser', `grant_type=password&username=${user.username}&password=${user.password}`)
       .then((res) => {
         console.log(res)
         localStorage.setItem('token', res.data["access_token"]);
