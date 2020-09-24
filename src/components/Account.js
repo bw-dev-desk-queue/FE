@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getWhoIAm } from '../actions';
 import { Container, Paper } from '@material-ui/core';
 import Ticket from './Ticket';
-import { array } from 'yup';
 
 const styles = {
   h3 : {
@@ -40,7 +39,6 @@ function Account(props) {
     // Filtering the IDs so that we do not have duplicates
     issuesToList = removeDuplicates(issuesToList);
 
-    console.log("Issues to list", issuesToList);
     return issuesToList;
   }
 
@@ -60,8 +58,6 @@ function Account(props) {
     array.forEach(answ => {
       // Find index of correlating issue in our issues array
       let issueIndex = ids.indexOf(answ.issue.id);
-      console.log(issues[issueIndex])
-
       issues[issueIndex].answers.concat([{id: answ.id, answer: answ.answer}])
     })
 
@@ -91,7 +87,6 @@ function Account(props) {
           }
         </Paper>
       </div>
-
     </Container>
   )
 }

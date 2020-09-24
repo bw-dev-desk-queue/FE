@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllIssues } from '../actions';
 import { connect } from 'react-redux';
 import { axiosWithAuth } from '../utils/axiosWithAuth'
+import Ticket from './Ticket';
 function Tickets(props) {
     const [data, setData] = useState([])
     useEffect(() => {
@@ -18,18 +19,7 @@ function Tickets(props) {
             <p>Tickets</p>
             {data.map(ticket => {
                 return (
-                    <div style={{
-                        border:"solid 0.25rem gray "
-                        , padding:"1rem" 
-                        , margin:"2rem" 
-                        , backgroundColor: "#EFEFEF"  
-                        }} key={ticket.id  }>
-                        <h2 >Title: {ticket.title}</h2>
-                        <p>Username: {ticket.createduser.username}</p>
-                        <p>Description: {ticket.description}</p>
-                        <p>Category: {ticket.category}</p>
-                        <p>Ticket Status: {ticket.isresolved === true ? 'true' : 'false'}</p>
-                    </div>
+                    <Ticket key={ticket.id} id={ticket.id} title={ticket.title} category={ticket.category} description={ticket.description} wit={ticket.whatitried} isResolved={ticket.isresolved} canResolve={false} answers={ticket.answers} />
                 )
             })}
         </div>
