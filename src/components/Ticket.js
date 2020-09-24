@@ -5,9 +5,10 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { makeStyles } from '@material-ui/core/styles';
 import * as yup from 'yup';
 import schema from '../validation/response_spec';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 import { connect } from 'react-redux';
-import { postAnswer } from '../actions';
+import { postAnswer, getWhoIAm } from '../actions';
 
 const useStyles = makeStyles({
     ticketContainer: {
@@ -70,7 +71,7 @@ const initialFormErrors = {
     message: "",
 }
 
-function Ticket({ id, title, description, category, wit, answers, isResolved, postAnswer }) {
+function Ticket({ id, title, description, category, wit, answers, isResolved, postAnswer, getWhoIAm }) {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
@@ -122,7 +123,16 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
     }
 
     const onResolveClick = () => {
-        // POST RESOLVE FOR TICKET
+      // POST RESOLVE FOR TICKET
+      // lets try not using a new redux action
+      axiosWithAuth().get(`/issues/resolve/${id}?resolved=true`)
+      .then(res => {
+        console.log(res);
+        getWhoIAm();
+      })
+      .catch(err => {
+        console.log(err);
+      })
     }
 
     // SIDE EFFECTS //
@@ -197,4 +207,4 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
     );
 }
 
-export default connect(() => ({}), { postAnswer })(Ticket)
+export default connect(() => ({}), { postAnswer, getWhoIAm })(Ticket)
