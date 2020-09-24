@@ -144,7 +144,7 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, ca
     return (
         <div className={classes.ticketContainer} >
             <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />} style={isResolved ? {backgroundColor: '#64f38c', color: 'white'} :  {backgroundColor: '#e73827', color: 'white'}} >
+                <AccordionSummary expandIcon={<ExpandMoreIcon style={{color: 'white',}} />} style={isResolved ? {backgroundColor: '#64f38c', color: 'white'} :  {backgroundColor: '#e73827', color: 'white'}} >
                     <div>
                         <h3>{title}</h3>
                     </div>
