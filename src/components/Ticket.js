@@ -24,6 +24,7 @@ const useStyles = makeStyles({
         paddingBottom: '1%',
     },
     ticketContent : {
+        paddingTop: '2%',
         borderBottom: '1px solid gainsboro',
     },
     response: {
@@ -51,13 +52,15 @@ const useStyles = makeStyles({
         width: '10%',
     },
     resolveButton: {
+        width: '20%',
         marginBottom: '2%',
     },
-    resolvedText: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: '5%',
+    miscDetails: {
+        textAlign: 'left',
+        width: '95%',
+        marginTop: '5%',
+        paddingTop: '1%',
+        paddingBottom: '4%',
     }
 })
 
@@ -71,11 +74,10 @@ const initialFormErrors = {
     message: "",
 }
 
-function Ticket({ id, title, description, category, wit, answers, isResolved, postAnswer, getWhoIAm }) {
+function Ticket({ id, title, description, category, wit, answers, isResolved, canResolve, postAnswer, getWhoIAm }) {
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
-    const [issueAnswers, setIssueAnswers] = useState(answers);
 
     const classes = useStyles();
 
@@ -113,11 +115,6 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
         }
         postAnswer(answer.id, answer.answer);
         // ADD TO STATE
-        if (!issueAnswers) {
-            setIssueAnswers( [answer] );
-        } else {
-            setIssueAnswers(...issueAnswers, [answer]);
-        }
         // CLEAR FORM
         setFormValues(initialFormValues);
     }
@@ -144,10 +141,6 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
             })
     }, [ formValues ]);
 
-    useEffect(() => {
-        console.log("Here are the responses: ", issueAnswers);
-    }, [issueAnswers])
-
     return (
         <div className={classes.ticketContainer} >
             <Accordion>
@@ -155,30 +148,35 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
                     <div>
                         <h3>{title}</h3>
                     </div>
-                    <div className={classes.resolvedText}>
-                        {isResolved ? <span>Resolved</span> : <span>Not Resolved</span>}
-                    </div>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionDetails} >
                     <div className={classes.ticketContent} >
-                        <p>
-                            {description}{wit}
-                        </p>
                         <div>
+                            <span><b>Description: </b></span>
                             <p>
-                                <b>WIT:</b> {wit}
+                                {description}
                             </p>
                         </div>
-                        <div>
-                            <p>
-                                <b>Category:</b> <em>{category}</em>
-                            </p>
+                        <div className={classes.miscDetails}>
+                            <div>
+                                <p>
+                                    <b>What I've Tried:</b> {wit}
+                                </p>
+                            </div>
+                            <div>
+                                <p>
+                                    <b>Category:</b> <em>{category}</em>
+                                </p>
+                            </div>
+                            <div>
+                                <b>Resolved: </b> {isResolved ? <span>YES</span> : <span>NO</span>}
+                            </div>
                         </div>
                     </div>
                     <div>
                         <h4 style={{textAlign: 'left'}}>Responses:</h4>
-                        {(issueAnswers.length > 0) &&
-                            issueAnswers.map(resp => {
+                        {(answers.length > 0) &&
+                            answers.map(resp => {
                                 return (
                                     <div key={resp.id} className={classes.response} >
                                         <div>
@@ -188,7 +186,7 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
                                 );
                             })
                         }
-                        {(!issueAnswers) &&
+                        {(!answers || answers.length <= 0) &&
                             <h5>There are no responses</h5>
                         }
                         <form onSubmit={onSubmit} className={classes.form}>
@@ -196,9 +194,9 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
                             <Button disabled={buttonDisabled} type="submit" variant="contained" color="primary" className={classes.button}>Reply</Button>
                         </form>
                     </div>
-                    {!isResolved &&
+                    {(!isResolved && canResolve) &&
                         <div>
-                            <Button onClick={onResolveClick} variant="contained" color="primary" className={classes.button, classes.resolveButton}>Resolve</Button>
+                            <Button onClick={onResolveClick} variant="contained" color="primary" className={classes.resolveButton}>Resolve</Button>
                         </div>
                     }
                 </AccordionDetails>
