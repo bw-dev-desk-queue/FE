@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getWhoIAm } from '../actions';
 import { Container, Paper } from '@material-ui/core';
 import Ticket from './Ticket';
+import { array } from 'yup';
 
 const styles = {
   h3 : {
@@ -31,6 +32,42 @@ function Account(props) {
     props.getWhoIAm();
   }, [])
 
+  const issuesList = (array) => {
+    let issuesToList = [] // An array of issues objects in the form { id, title, category, description, whatitried, isresolved, answers }
+    // Filling our array with issues.
+    issuesToList = props.userAnswers;
+
+    // Filtering the IDs so that we do not have duplicates
+    issuesToList = removeDuplicates(issuesToList);
+
+    console.log("Issues to list", issuesToList);
+    return issuesToList;
+  }
+
+  // Removes duplicate tickets in an array
+  const removeDuplicates = (array) => {
+    let ids = [];
+    let issues = []; // Array of issues with no duplicates
+
+    // Remove duplicates
+    array.map(answ => {
+      if (!ids.includes(answ.issue.id)) {
+        ids.push(answ.issue.id);
+        issues.push({...answ.issue, answers: [{answer: answ.answer, id: answ.id}]});
+      }
+    })
+
+    array.forEach(answ => {
+      // Find index of correlating issue in our issues array
+      let issueIndex = ids.indexOf(answ.issue.id);
+      console.log(issues[issueIndex])
+
+      issues[issueIndex].answers.concat([{id: answ.id, answer: answ.answer}])
+    })
+
+    return issues;
+  }
+
   return (
     <Container>
       <h2>Account</h2>
@@ -48,8 +85,8 @@ function Account(props) {
         <Paper elevation={2} style={styles.ticketsContainer} >
           <h3 style={styles.h3} >My Answers</h3>
           {
-            props.userAnswers.map(ticket => {
-              return (<Ticket key={ticket.id} id={ticket.id} title={ticket.issue.title} category={ticket.issue.category} description={ticket.issue.description} wit={ticket.issue.whatitried} isResolved={ticket.issue.isresolved} canResolve={false} answers={[{id: ticket.id, answer: ticket.answer}]} />);
+            issuesList(props.userAnswers).map(issue => {
+              return (<Ticket key={issue.id} id={issue.id} title={issue.title} category={issue.category} description={issue.description} wit={issue.whatitried} isResolved={issue.isresolved} canResolve={false} answers={issue.answers} />);
             })
           }
         </Paper>
@@ -65,7 +102,7 @@ function mapStateToProps(state) {
     fetching: state.fetching,
     error: state.error,
     userIssues: state.userIssues,
-    userAnswers: state.userAnswers,   
+    userAnswers: state.userAnswers,
   }
 }
 

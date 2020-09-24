@@ -74,8 +74,9 @@ export const postIssue = (issue, historyObj) => (dispatch) => {
 
 export const postAnswer = (issueId, message) => (dispatch) => {
   dispatch({type: POST_ANSWER_START});
+  console.log(issueId, message)
   axiosWithAuth()
-    .post(`/answers/issueid/${issueId}`, 
+    .post(`/answers/issueid/${issueId}`,
       {answer: message}
     )
     .then(res => {
