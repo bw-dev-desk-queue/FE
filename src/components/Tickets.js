@@ -18,8 +18,13 @@ function Tickets(props) {
             <p>Tickets</p>
             {data.map(ticket => {
                 return (
-                    <div key={ticket.id}>
-                        <h2>Title: {ticket.title}</h2>
+                    <div style={{
+                        border:"solid 0.25rem gray "
+                        , padding:"1rem" 
+                        , margin:"2rem" 
+                        , backgroundColor: "#EFEFEF"  
+                        }} key={ticket.id  }>
+                        <h2 >Title: {ticket.title}</h2>
                         <p>Username: {ticket.createduser.username}</p>
                         <p>Description: {ticket.description}</p>
                         <p>Category: {ticket.category}</p>
