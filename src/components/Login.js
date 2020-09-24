@@ -53,6 +53,7 @@ function Login(props) {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [buttonDisabled, setButtonDisabled] = useState(intialButtonDisabled);
   const [accessToken, setAccessToken] = useState(initialAccessToken);
+  const [networkError, setNetworkError] = useState('');
 
   const classes = useStyles();
 
@@ -84,7 +85,14 @@ function Login(props) {
         setAccessToken(res.data["access_token"]);
       })
       .catch(err => {
-        console.log(err);
+        console.log(err.response.data.error_description);
+        const error = err.response.data.error_description;
+        if (error.includes('Error')) {
+          setNetworkError(error);
+        } else {
+          setNetworkError('Error: ' + error);
+        }
+        
       });
   }
 
@@ -104,6 +112,13 @@ function Login(props) {
   const onChange = (evt) => {
     const name = evt.target.name;
     const value = evt.target.value;
+    
+    // handle networkError
+    if (networkError.includes('cred') && name === 'password') {
+      setNetworkError('');
+    } else if (networkError.includes('name') && name === 'username') {
+      setNetworkError('');
+    }
 
     // VALIDATE
     validate(name, value);
@@ -141,6 +156,7 @@ function Login(props) {
           </div>
           <Button className={classes.button} disabled={buttonDisabled} type="submit" variant="contained" color="primary">Login</Button>
         </form>
+        <p style={{color: 'red'}}>{networkError}</p>
       </Paper>
     </Container>
   );
