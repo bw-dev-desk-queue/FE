@@ -55,6 +55,7 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState(initialFormErrors);
   const [buttonDisabled, setButtonDisabled] = useState(intialButtonDisabled);
   const [accessToken, setAccessToken] = useState(initialAccessToken);
+  const [networkError, setNetworkError] = useState('');
 
   const classes = useStyles();
 
@@ -65,15 +66,14 @@ export default function Signup() {
       password: formValues.password,
       roles: formValues.role.split(' and ') // Could be ["student"], ["helper"], or ["student", "helper"]
     }
-      axiosSignup().post(
-        '/createnewuser', newUser
-      )
-      .then((res) => {
-        console.log(res)
-        localStorage.setItem('token', res.data["access_token"]);
-        history.push('/account');
+      axiosSignup().post('/createnewuser', newUser)
+        .then((res) => {
+          localStorage.setItem('token', res.data["access_token"]);
+          history.push('/account');
+        })
+      .catch((err) => {
+        setNetworkError(err.response.data.detail);
       })
-      .catch((err) => console.log(err))
   }
 
   const validate = (name, value) => {
@@ -92,6 +92,10 @@ export default function Signup() {
   const onChange = (evt) => {
     const name = evt.target.name;
     const value = evt.target.value;
+    console.log(name);
+    if ( name === 'username' ) {
+      setNetworkError('');
+    }
 
     // VALIDATE
     validate(name, value);
@@ -138,6 +142,7 @@ export default function Signup() {
           </div>
           <Button className={classes.button} disabled={buttonDisabled} type="submit" variant="contained" color="primary">Submit</Button>
         </form>
+        <p style={{color: 'red'}}>{networkError}</p>
       </Paper>
     </Container>
   )
