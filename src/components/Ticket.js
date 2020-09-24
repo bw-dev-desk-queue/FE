@@ -145,7 +145,7 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, po
     }, [ formValues ]);
 
     useEffect(() => {
-        console.log("Here are the responses: ", issueAnswers);
+        //console.log("Here are the responses: ", issueAnswers);
     }, [issueAnswers])
 
     return (

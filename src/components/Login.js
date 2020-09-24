@@ -86,7 +86,9 @@ function Login(props) {
       })
       .catch(err => {
         console.log(err.response.data.error_description);
-        const error = err.response.data.error_description;
+        const error = err.response.data.error_description  ?
+          err.response.data.error_description : err;
+      
         if (error.includes('Error')) {
           setNetworkError(error);
         } else {
