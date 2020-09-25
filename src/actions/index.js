@@ -72,17 +72,20 @@ export const postIssue = (issue, historyObj) => (dispatch) => {
     })
 }
 
-export const postAnswer = (issueId, message) => (dispatch) => {
+export const postAnswer = (issueId, message, url, historyObj) => (dispatch) => {
   dispatch({type: POST_ANSWER_START});
-  console.log(issueId, message)
+  console.log(url);
   axiosWithAuth()
     .post(`/answers/issueid/${issueId}`,
       {answer: message}
     )
     .then(res => {
-      console.log(res);
+      console.log(url.pathname);
       dispatch({type: POST_ANSWER_SUCCESS})
-      dispatch(getWhoIAm());
+      if (url.pathname.includes('account'))
+        dispatch(getWhoIAm());
+      if (url.pathname.includes('ticket'))
+        historyObj.push('/account');
     })
     .catch(err => {
       console.log(err)

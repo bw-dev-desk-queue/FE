@@ -9,7 +9,7 @@ import { axiosWithAuth } from '../utils/axiosWithAuth';
 
 import { connect } from 'react-redux';
 import { postAnswer, getWhoIAm } from '../actions';
-
+import { useLocation, useHistory } from 'react-router-dom';
 const useStyles = makeStyles({
     ticketContainer: {
       width: '95%',
@@ -78,6 +78,8 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, ca
     const [formValues, setFormValues] = useState(initialFormValues);
     const [formErrors, setFormErrors] = useState(initialFormErrors);
     const [buttonDisabled, setButtonDisabled] = useState(initialButtonDisabled);
+    const url = useLocation();
+    const history = useHistory();
 
     const classes = useStyles();
 
@@ -113,7 +115,7 @@ function Ticket({ id, title, description, category, wit, answers, isResolved, ca
             id: id,
             answer: formValues.message
         }
-        postAnswer(answer.id, answer.answer);
+        postAnswer(answer.id, answer.answer, url, history);
         // ADD TO STATE
         // CLEAR FORM
         setFormValues(initialFormValues);

@@ -3,12 +3,15 @@ import { getAllIssues } from '../actions';
 import { connect } from 'react-redux';
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 import Ticket from './Ticket';
+import { useHistory } from 'react-router-dom';
 function Tickets(props) {
     const [data, setData] = useState([])
     useEffect(() => {
         axiosWithAuth()
             .get('https://dbidwell-dev-desk-queue.herokuapp.com/issues/issues')
-            .then(res => setData(res.data))
+            .then(res => {
+              setData(res.data)
+            })
             .catch(err => console.log(err))
     }, [])
     if (props.fetching === false && props.issues.length > 0) {
